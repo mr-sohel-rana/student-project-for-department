@@ -13,12 +13,12 @@ const Index = () => {
     <BrowserRouter>
       <Nav />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/Showbook' element={<Showbook />} />
-        <Route path='/AddBook' element={<AddBook />} />
-        <Route path='/EditBook' element={<EditBook />} />
-        <Route path='/ProfilePage' element={<ProfilePage />} />
-        <Route path='/*' element={<Home />} /> {/* Catch-all route */}
+        <Route path="/" element={<Home />} />
+        <Route path="/showbook" element={<Showbook />} />
+        <Route path="/addbook" element={<AddBook />} />
+        <Route path="/editbook" element={<EditBook />} />
+        <Route path="/profilepage" element={<ProfilePage />} />
+        <Route path="*" element={<Home />} /> {/* Catch-all route */}
       </Routes>
       <Footer />
     </BrowserRouter>

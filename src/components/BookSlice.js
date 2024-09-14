@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import img from '../image/sf2.jpg';
 
 const initialBooks = {
     books: [
-        { id: 1, name: "sohel", roll: 200608, address: "sirajganj", chamber: "pabna", institution: "ice", bio: "hi this is sohel", batch: "2019-20" },
+        // Initial book data
+        { password: '12345', img, id: 1, name: "sohel", roll: 200608, address: "sirajganj", chamber: "pabna", institution: "ice", bio: "hi this is sohel", batch: "2019-20" },
     ]
 };
 
@@ -19,9 +21,10 @@ export const BookSlice = createSlice({
             state.books = state.books.filter((book) => book.id !== id);
         },
         updateBook: (state, action) => {
-            const { id, name, roll, address, chamber, institution, bio, batch } = action.payload;
+            const { img, id, name, roll, address, chamber, institution, bio, batch } = action.payload;
             const book = state.books.find((book) => book.id === id);
             if (book) {
+                book.img = img;
                 book.name = name;
                 book.roll = roll;
                 book.address = address;
@@ -34,5 +37,7 @@ export const BookSlice = createSlice({
     }
 });
 
+// Export the actions
 export const { showBook, addBook, deleteBook, updateBook } = BookSlice.actions;
+// Export the reducer
 export default BookSlice.reducer;

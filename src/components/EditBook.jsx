@@ -1,52 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { updateBook } from './BookSlice';
+import { updateBook } from './BookSlice'; // Import action to update a book
 
 const EditBook = () => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { book } = location.state || {}; // Get the book from the location state
 
-  const [name, setName] = useState('');
-  const [roll, setRoll] = useState('');
-  const [address, setAddress] = useState('');
-  const [chamber, setChamber] = useState('');
-  const [institution, setInstitution] = useState('');
-  const [bio, setBio] = useState('');
-  const [batch, setBatch] = useState('');
+  // Initialize form fields with the book details
+  const [name, setName] = useState(book?.name || '');
+  const [roll, setRoll] = useState(book?.roll || '');
+  const [address, setAddress] = useState(book?.address || '');
+  const [chamber, setChamber] = useState(book?.chamber || '');
+  const [institution, setInstitution] = useState(book?.institution || '');
+  const [bio, setBio] = useState(book?.bio || '');
+  const [batch, setBatch] = useState(book?.batch || '');
+  const [image, setImage] = useState(book?.img || null); // Initialize with existing image
+  const [password, setPassword] = useState(book?.password || ''); // Initialize with existing password
 
-  const book = location.state?.book; // Access passed book from location state
-
-  useEffect(() => {
-    if (book) {
-      setName(book.name);
-      setRoll(book.roll);
-      setAddress(book.address);
-      setChamber(book.chamber);
-      setInstitution(book.institution);
-      setBio(book.bio);
-      setBatch(book.batch);
-    }
-  }, [book]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (book) {
-      dispatch(updateBook({ id: book.id, name, roll, address, batch, chamber, institution, bio }));
-      navigate('/Showbook'); // Navigate to Showbook page after update
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // Store the base64 URL of the image
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  if (!book) return <div>No book selected for editing</div>;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const updatedBook = {
+      ...book,
+      name,
+      roll,
+      address,
+      batch,
+      chamber,
+      institution,
+      bio,
+      img: image, // Updated image data
+      password, // Updated password data
+    };
+
+    dispatch(updateBook(updatedBook)); // Dispatch update action
+    navigate("/Showbook", { replace: true });
+  };
+
+  useEffect(() => {
+    if (!book) {
+      navigate("/Showbook"); // Redirect if no book data is provided
+    }
+  }, [book, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Edit you profile</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Book Details</h2>
         <form onSubmit={handleSubmit}>
+          {/* Existing input fields */}
           <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 mb-2">Name:</label>
+            <label htmlFor="name" className="block text-gray-700 mb-2">Enter your name</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -58,7 +76,7 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="roll" className="block text-gray-700 mb-2">Roll:</label>
+            <label htmlFor="roll" className="block text-gray-700 mb-2">Enter your roll</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -70,7 +88,7 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="address" className="block text-gray-700 mb-2">Address:</label>
+            <label htmlFor="address" className="block text-gray-700 mb-2">Current Address</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -82,7 +100,7 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="chamber" className="block text-gray-700 mb-2">Chamber District:</label>
+            <label htmlFor="chamber" className="block text-gray-700 mb-2">Current Chamber District</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -94,7 +112,7 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="batch" className="block text-gray-700 mb-2">Batch:</label>
+            <label htmlFor="batch" className="block text-gray-700 mb-2">Department Batch</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -106,7 +124,7 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="institution" className="block text-gray-700 mb-2">Institution:</label>
+            <label htmlFor="institution" className="block text-gray-700 mb-2">Institution Name</label>
             <input
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               type="text"
@@ -118,12 +136,44 @@ const EditBook = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="bio" className="block text-gray-700 mb-2">Bio:</label>
+            <label htmlFor="bio" className="block text-gray-700 mb-2">Add Your Small Bio</label>
             <textarea
               className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
               id="bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Image upload field */}
+          <div className="mb-4">
+            <label htmlFor="image" className="block text-gray-700 mb-2">Upload Your Image</label>
+            <input
+              className="w-full border-2 border-gray-300 p-2 rounded"
+              type="file"
+              id="image"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+
+          {/* Display selected image */}
+          {image && (
+            <div className="mb-4 flex justify-center">
+              <img src={image} alt="Selected" className="w-32 h-32 object-cover rounded-full border-2 border-gray-300" />
+            </div>
+          )}
+
+          {/* Password input field */}
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
+            <input
+              className="w-full border-2 border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500"
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
