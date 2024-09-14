@@ -1,5 +1,5 @@
 import React from 'react';
-import img1 from '../image/image1.JPG';
+import image1 from '../image/image1.JPG';
 import img2 from '../image/students.jpeg';
 import img3 from '../image/p.jpg';
 import img4 from '../image/ap1.png';
@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <>
       <div 
-        style={{ backgroundImage: `url(${img1})` }} 
+        style={{ backgroundImage: `url(${image})` }} 
         className="bg-cover bg-center h-screen items-start justify-center text-white"
       >
         <div className="flex items-center bg-black bg-opacity-50 w-full  h-full">
