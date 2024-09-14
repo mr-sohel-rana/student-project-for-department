@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <>
       <div 
-        style={{ backgroundImage: `url(${image})` }} 
+        style={{ backgroundImage: `url(${image1})` }} 
         className="bg-cover bg-center h-screen items-start justify-center text-white"
       >
         <div className="flex items-center bg-black bg-opacity-50 w-full  h-full">
