@@ -4,7 +4,7 @@ import img from '../image/sf2.jpg';
 const initialBooks = {
     books: [
         // Initial book data
-        { password: '12345', img, id: 1, name: "sohel", roll: 200608, address: "sirajganj", chamber: "pabna", institution: "ice", bio: "hi this is sohel", batch: "2019-20" },
+        { password: '12345', img, id: 1, name: "sohel", roll: 200608, address: "sirajganj", chamber: "pabna", institution: "ice", bio: "hi this is sohel", batch: "12 Batch" },
     ]
 };
 
